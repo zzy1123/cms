@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bwie.mapper.RoleMapper">
+	<resultMap id="BaseResultMap" type="com.bwie.entity.Role">
+
+		<id column="rid" property="rid" jdbcType="INTEGER" />
+		<result column="rname" property="rname" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		rid, rname
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_role
+		where rid = #{rid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_role
+		where rid = #{rid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.bwie.entity.Role">
+		insert into t_role (rid,
+		rname)
+		values (#{rid,jdbcType=INTEGER}, #{rname,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.bwie.entity.Role">
+		insert into t_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="rid != null">
+				rid,
+			</if>
+			<if test="rname != null">
+				rname,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="rid != null">
+				#{rid,jdbcType=INTEGER},
+			</if>
+			<if test="rname != null">
+				#{rname,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.bwie.entity.Role">
+		update t_role
+		<set>
+			<if test="rname != null">
+				rname = #{rname,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where rid = #{rid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.bwie.entity.Role">
+
+		update t_role
+		set
+		rname = #{rname,jdbcType=VARCHAR}
+		where rid = #{rid,jdbcType=INTEGER}
+	</update>
+	<!--查询角色列表 -->
+	<select id="selectRoleList" resultType="map">
+		SELECT
+		role.rid,role.rname,id,pri.pid,GROUP_CONCAT(url)
+		url,GROUP_CONCAT(pname) pname
+		FROM t_role role
+		LEFT JOIN
+		t_role_privillege ro_pr
+		ON role.rid=ro_pr.rid
+		LEFT JOIN t_privillege pri
+		ON ro_pr.pid=pri.pid
+		GROUP BY role.rid
+
+	</select>
+	<!--查询角色权限ById -->
+	<select id="selectResourceByRid" resultType="com.bwie.entity.Resource"
+		parameterType="int">
+		SELECT
+		pri.pid,pri.url,pri.pname
+		FROM t_role_privillege rp
+		LEFT JOIN t_privillege pri ON rp.pid=pri.pid
+		where rid=#{rid}
+
+	</select>
+
+	<select id="selectResource" resultType="com.bwie.entity.Resource">
+		SELECT pid,pname,url
+		FROM t_privillege
+	</select>
+	<!--删除角色权限 -->
+	<delete id="deleteResourceByRoleId" parameterType="map">
+		DELETE FROM
+		t_role_privillege
+		where rid = #{rid}
+
+	</delete>
+	<!--添加角色权限 -->
+	<insert id="insertResourceByRoleId" parameterType="map">
+		INSERT INTO 
+		t_role_privillege(rid,pid) 
+		values(#{rid},#{pid})
+	</insert>
+</mapper>

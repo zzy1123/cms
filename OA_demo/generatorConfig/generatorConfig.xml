@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+<classPathEntry
+        location="E:/workspaces1510k/mysql-connector-java-5.1.21.jar" />
+        
+  <!-- 内容 -->
+  <context id="context1">
+  	<!-- 链接属性 -->
+    <jdbcConnection connectionURL="jdbc:mysql://localhost:3306/1510K" driverClass="com.mysql.jdbc.Driver" password="root" userId="root" />
+    <!-- 实体类生成地址 -->
+    <javaModelGenerator targetPackage="com.bwie.entity" targetProject="early_warning" />
+    <!-- sql地址 -->
+    <sqlMapGenerator targetPackage="com.bwie.mapper" targetProject="early_warning" />
+    <!-- 所生成的mapper接口 -->
+    <javaClientGenerator targetPackage="com.bwie.mapper" targetProject="early_warning" type="XMLMAPPER" />
+    
+    <!-- 数据库表 -->
+    <table tableName="area" domainObjectName="Area" 
+    enableCountByExample="false" enableUpdateByExample="false" 
+    enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+    </table>
+  </context>
+</generatorConfiguration>

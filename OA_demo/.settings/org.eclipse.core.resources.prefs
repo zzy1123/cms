@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+encoding//WebContent/toLogin.jsp=UTF-8
+encoding//src/com/bwie/interceptor/AdminLoginInterceptor.java=UTF-8
+encoding//src/com/bwie/utils/MD5Util.java=UTF-8

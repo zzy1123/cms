@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bwie.mapper.ApplyMapper">
+	
+	<!-- <resultMap id="BaseResultMap" type="com.bwie.entity.Reimbursement">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="reiname" property="reiname" jdbcType="VARCHAR" />
+		<result column="reidate" property="reidate" jdbcType="VARCHAR" />
+		<result column="reimoney" property="reimoney" jdbcType="INTEGER" />
+		<result column="reistate" property="reistate" jdbcType="INTEGER" />
+		<result column="uid" property="uid" jdbcType="INTEGER" />
+		<result column="rid" property="rid" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, reiname, reidate, reimoney, reistate, uid, rid
+	</sql>
+	
+	根据ID查询baoxiaoxiang
+	<select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT <include refid="Base_Column_List" />
+		  FROM t_reimbursement
+		 WHERE id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_reimbursement
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="insert" parameterType="com.bwie.entity.Reimbursement">
+		
+		insert into t_reimbursement (id, reiname, reidate,
+		reimoney, reistate,
+		uid,
+		rid)
+		values (#{id,jdbcType=INTEGER}, #{reiname,jdbcType=VARCHAR},
+		#{reidate,jdbcType=VARCHAR},
+		#{reimoney,jdbcType=INTEGER},
+		#{reistate,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER},
+		#{rid,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.bwie.entity.Reimbursement">
+		
+		insert into t_reimbursement
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="reiname != null">
+				reiname,
+			</if>
+			<if test="reidate != null">
+				reidate,
+			</if>
+			<if test="reimoney != null">
+				reimoney,
+			</if>
+			<if test="reistate != null">
+				reistate,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="rid != null">
+				rid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="reiname != null">
+				#{reiname,jdbcType=VARCHAR},
+			</if>
+			<if test="reidate != null">
+				#{reidate,jdbcType=VARCHAR},
+			</if>
+			<if test="reimoney != null">
+				#{reimoney,jdbcType=INTEGER},
+			</if>
+			<if test="reistate != null">
+				#{reistate,jdbcType=INTEGER},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=INTEGER},
+			</if>
+			<if test="rid != null">
+				#{rid,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.bwie.entity.Reimbursement">
+		
+		update t_reimbursement
+		<set>
+			<if test="reiname != null">
+				reiname = #{reiname,jdbcType=VARCHAR},
+			</if>
+			<if test="reidate != null">
+				reidate = #{reidate,jdbcType=VARCHAR},
+			</if>
+			<if test="reimoney != null">
+				reimoney = #{reimoney,jdbcType=INTEGER},
+			</if>
+			<if test="reistate != null">
+				reistate = #{reistate,jdbcType=INTEGER},
+			</if>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=INTEGER},
+			</if>
+			<if test="rid != null">
+				rid = #{rid,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.bwie.entity.Reimbursement">
+		
+		update t_reimbursement
+		set reiname = #{reiname,jdbcType=VARCHAR},
+		reidate = #{reidate,jdbcType=VARCHAR},
+		reimoney =
+		#{reimoney,jdbcType=INTEGER},
+		reistate = #{reistate,jdbcType=INTEGER},
+		uid = #{uid,jdbcType=INTEGER},
+		rid = #{rid,jdbcType=INTEGER}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<select id="selectList" resultType="map" parameterType="int">
+	SELECT
+		rei.reiname,rei.reidate,rei.reimoney,rei.reistate,state.sname,rei.id,tname.reiminame
+		from
+		`t_reimbursement` rei LEFT JOIN t_state state on
+		rei.reistate=state.sid
+    LEFT JOIN t_reimbursement_name tname on rei.reiname=tname.reimid
+		WHERE rei.uid=#{uid}
+	</select>
+	<update id="present" parameterType="map">
+		UPDATE t_reimbursement SET rid=#{rid},reistate=#{reistate} WHERE id=#{id}
+	</update>
+	<select id="approval" resultType="map" parameterType="int">
+		SELECT
+		rei.reiname,rei.reidate,rei.reimoney,rei.reistate,state.sname,u.uname,rei.id,tname.reiminame
+		FROM `t_reimbursement` rei LEFT JOIN t_state state on
+		rei.reistate=state.sid
+		LEFT JOIN t_users u ON rei.uid=u.uid
+		  LEFT JOIN t_reimbursement_name tname on rei.reiname=tname.reimid
+		WHERE rei.rid=#{rid}
+	</select>
+	添加报销 
+	<insert id="addApply" parameterType="com.bwie.entity.Reimbursement">
+	INSERT INTO t_reimbursement(reiname,reidate,reimoney,reistate,uid) 
+	VALUES(#{reiname},#{reidate},#{reimoney},1,#{uid})
+	</insert>
+	修改报销 
+	<update id="updateApply" parameterType="com.bwie.entity.Reimbursement">
+		UPDATE t_reimbursement SET reiname=#{reiname},reimoney=#{reimoney},reidate=#{reidate},refertime=now() WHERE id=#{id}
+	</update> -->
+</mapper>
